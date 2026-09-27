@@ -14,8 +14,8 @@
  * 7. При первом деплое Google спросит разрешения — подтверди (это твой же скрипт).
  */
 
-const TELEGRAM_BOT_TOKEN = 'ВСТАВЬ_ТОКЕН_БОТА'; // получишь у @BotFather
-const TELEGRAM_CHAT_ID = 'ВСТАВЬ_CHAT_ID';       // получишь у @userinfobot (или см. инструкцию)
+const TELEGRAM_BOT_TOKEN = '8836963799:AAF6QYiPF7wZNMR49INsxQLeNx3selsZTOM'; // получишь у @BotFather
+const TELEGRAM_CHAT_ID = '725723757';       // получишь у @userinfobot (или см. инструкцию)
 
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
