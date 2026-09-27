@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATRIUM — архитектурная студия (демо-проект)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EDEAE3;
+    --text: #201D18;
+    --muted: #6E6A62;
+    --accent: #7C6A4E;
+    --line: #D3CCBC;
+    --panel: #F7F5F0;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+    color: var(--text);
+    font-family: 'Work Sans', sans-serif;
+  }
+  h1, h2, h3{ font-family: 'Zilla Slab', serif; margin: 0; }
+  .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  a{ color: inherit; }
+
+  header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo{ font-family: 'Zilla Slab', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.02em; }
+  nav{ display: flex; gap: 32px; font-size: 14px; color: var(--muted); }
+  nav a{ text-decoration: none; }
+  nav a:hover{ color: var(--text); }
+
+  .hero{
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+    padding: 72px 0 88px;
+    align-items: end;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero h1{
+    font-size: 52px;
+    line-height: 1.15;
+    font-weight: 500;
+    max-width: 14ch;
+  }
+  .hero p{
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 42ch;
+    margin: 24px 0 32px;
+  }
+  .btn{
+    display: inline-block;
+    background: var(--text);
+    color: var(--bg);
+    padding: 13px 26px;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid var(--text);
+  }
+  .btn:hover{ background: transparent; color: var(--text); }
+  .hero-note{
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 20px;
+    line-height: 1.6;
+  }
+
+  .index{ padding: 64px 0; }
+  .index-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+  }
+  .index-head h2{ font-size: 28px; font-weight: 500; }
+  .index-head span{ font-size: 13px; color: var(--muted); }
+
+  .project-row{
+    display: grid;
+    grid-template-columns: 50px 1fr 200px 140px;
+    align-items: center;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    gap: 16px;
+  }
+  .project-row:last-child{ border-bottom: 1px solid var(--line); }
+  .project-row .n{ font-family: 'Zilla Slab', serif; color: var(--muted); font-size: 14px; }
+  .project-row h3{ font-size: 19px; font-weight: 500; }
+  .project-row .type{ font-size: 13px; color: var(--muted); }
+  .project-row .year{ font-size: 13px; color: var(--muted); text-align: right; }
+
+  .principles{
+    padding: 64px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .principles h3{ font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+  .principles p{ font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  .contact{
+    padding: 64px 0 80px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .contact h2{ font-size: 30px; font-weight: 500; max-width: 12ch; }
+  .contact form{ display: flex; flex-direction: column; gap: 14px; }
+  .contact input, .contact textarea{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 13px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .contact textarea{ min-height: 90px; resize: vertical; }
+
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 24px 0;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns: 1fr; }
+    .hero h1{ font-size: 38px; }
+    .project-row{ grid-template-columns: 30px 1fr; }
+    .project-row .type, .project-row .year{ grid-column: 2; }
+    .principles{ grid-template-columns: 1fr; }
+    .contact{ grid-template-columns: 1fr; }
+    nav{ display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">ATRIUM</div>
+    <nav>
+      <a href="#work">Проекты</a>
+      <a href="#principles">Подход</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Пространство, которое работает на людей.</h1>
+      <p>Проектируем частные дома, интерьеры и общественные пространства — от эскиза до рабочей документации.</p>
+      <a class="btn" href="#contact">Обсудить проект</a>
+    </div>
+    <div class="hero-note">
+      Мастерская из шести архитекторов.<br>
+      Работаем по России, полный цикл от концепции до авторского надзора.
+    </div>
+  </section>
+
+  <section class="index" id="work">
+    <div class="index-head">
+      <h2>Проекты</h2>
+      <span>2023–2026</span>
+    </div>
+
+    <div class="project-row">
+      <span class="n">01</span>
+      <h3>Дом на склоне</h3>
+      <span class="type">Частный дом</span>
+      <span class="year">2026</span>
+    </div>
+    <div class="project-row">
+      <span class="n">02</span>
+      <h3>Лофт на Заводской</h3>
+      <span class="type">Интерьер</span>
+      <span class="year">2025</span>
+    </div>
+    <div class="project-row">
+      <span class="n">03</span>
+      <h3>Кофейня Meridian</h3>
+      <span class="type">Коммерческое пространство</span>
+      <span class="year">2025</span>
+    </div>
+    <div class="project-row">
+      <span class="n">04</span>
+      <h3>Резиденция У.</h3>
+      <span class="type">Частный дом</span>
+      <span class="year">2024</span>
+    </div>
+    <div class="project-row">
+      <span class="n">05</span>
+      <h3>Офис студии Nord</h3>
+      <span class="type">Интерьер</span>
+      <span class="year">2024</span>
+    </div>
+    <div class="project-row">
+      <span class="n">06</span>
+      <h3>Павильон в парке</h3>
+      <span class="type">Общественное пространство</span>
+      <span class="year">2023</span>
+    </div>
+  </section>
+
+  <section class="principles" id="principles">
+    <div>
+      <h3>Свет прежде декора</h3>
+      <p>Начинаем с того, как в пространство попадает свет, и уже вокруг этого выстраиваем материалы и форму.</p>
+    </div>
+    <div>
+      <h3>Один разговор с материалом</h3>
+      <p>На объект — не больше двух-трёх основных материалов. Меньше решений — точнее результат.</p>
+    </div>
+    <div>
+      <h3>Ведём до сдачи</h3>
+      <p>Авторский надзор на площадке — не передаём проект строителям и не исчезаем после эскиза.</p>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div>
+      <h2>Обсудим ваш проект.</h2>
+      <p style="color:var(--muted); font-size:14px; line-height:1.6; margin-top:16px;">Отвечаем в течение суток. Присылайте даже черновой набросок идеи — разберёмся вместе.</p>
+    </div>
+    <form onsubmit="return false;">
+      <input type="text" placeholder="Имя" required>
+      <input type="text" placeholder="Телефон или email" required>
+      <textarea placeholder="Что хотите построить или переделать"></textarea>
+      <button type="submit" class="btn" style="cursor:pointer;">Отправить</button>
+    </form>
+  </section>
+
+  <footer>
+    <span>ATRIUM</span>
+    <span>Демо-проект студии SYSTEM/AI</span>
+  </footer>
+
+</div>
+</body>
+</html>

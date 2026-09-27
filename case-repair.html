@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXPOINT — ремонт техники (демо-проект)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F1F3F4;
+    --text: #14171A;
+    --muted: #5B6570;
+    --accent: #D9822B;
+    --steel: #2F6690;
+    --card: #FFFFFF;
+    --border: #DDE1E4;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .mono{ font-family: 'IBM Plex Mono', monospace; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  a{ color: inherit; text-decoration: none; }
+
+  header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+  }
+  .logo{ font-weight: 700; font-size: 18px; }
+  .logo span{ color: var(--accent); }
+  nav{ display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .btn{
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn:hover{ background: #C4761F; }
+  .btn.ghost{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn.ghost:hover{ border-color: var(--text); }
+
+  .hero{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 56px 0 64px;
+    align-items: center;
+  }
+  .status-chip{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--steel);
+    background: rgba(47,102,144,0.08);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .status-chip .dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--steel); }
+  .hero h1{
+    font-size: 42px;
+    line-height: 1.15;
+    font-weight: 700;
+    margin: 0 0 16px;
+    max-width: 12ch;
+  }
+  .hero p{ font-size: 16px; line-height: 1.6; color: var(--muted); max-width: 42ch; margin: 0 0 26px; }
+  .hero-actions{ display: flex; gap: 12px; }
+
+  .track-card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .track-card .id{ font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .track-card .device{ font-size: 18px; font-weight: 600; margin-bottom: 18px; }
+  .track-steps{ display: flex; justify-content: space-between; position: relative; }
+  .track-steps::before{
+    content: '';
+    position: absolute;
+    top: 9px; left: 9px; right: 9px;
+    height: 2px;
+    background: var(--border);
+    z-index: 0;
+  }
+  .track-step{ position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 25%; }
+  .track-step .pt{ width: 18px; height: 18px; border-radius: 50%; background: var(--border); border: 3px solid var(--bg); }
+  .track-step.done .pt{ background: var(--steel); }
+  .track-step span{ font-size: 11px; color: var(--muted); text-align: center; }
+  .track-step.done span{ color: var(--text); font-weight: 600; }
+
+  section{ padding: 56px 0; border-top: 1px solid var(--border); }
+  .section-head{ margin-bottom: 32px; }
+  .section-head h2{ font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+  .section-head p{ color: var(--muted); font-size: 14px; margin: 0; }
+
+  .devices{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .device-card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .device-card h3{ font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+  .device-card p{ font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+  .device-card .price{ font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--steel); }
+
+  .flow{ display: flex; gap: 0; }
+  .flow-step{ flex: 1; padding-right: 20px; }
+  .flow-step .num{ font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent); display: block; margin-bottom: 8px; }
+  .flow-step h3{ font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+  .flow-step p{ font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  .contact-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .contact-grid h2{ font-size: 26px; font-weight: 700; max-width: 12ch; margin: 0 0 12px; }
+  form{ display: flex; flex-direction: column; gap: 12px; }
+  input, select, textarea{
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--card);
+    color: var(--text);
+  }
+  textarea{ min-height: 90px; resize: vertical; }
+
+  footer{ padding: 24px 0; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; border-top: 1px solid var(--border); }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns: 1fr; }
+    nav{ display: none; }
+    .devices{ grid-template-columns: repeat(2, 1fr); }
+    .flow{ flex-direction: column; gap: 24px; }
+    .flow-step{ padding-right: 0; }
+    .contact-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">FIX<span>POINT</span></div>
+    <nav>
+      <a href="#devices">Что чиним</a>
+      <a href="#flow">Как это работает</a>
+      <a href="#contact">Оставить заявку</a>
+    </nav>
+    <a class="btn" href="#contact">Оставить заявку</a>
+  </header>
+
+  <section class="hero" style="border-top:none; padding-top:32px;">
+    <div>
+      <div class="status-chip"><span class="dot"></span>Средний срок ремонта — 1–2 дня</div>
+      <h1>Техника сломалась — мы уже едем.</h1>
+      <p>Ремонт ноутбуков, телефонов и бытовой техники с выездом или в мастерской. Диагностика бесплатно, если не чините у нас — ничего не платите.</p>
+      <div class="hero-actions">
+        <button class="btn">Оставить заявку</button>
+        <button class="btn ghost">Узнать стоимость</button>
+      </div>
+    </div>
+    <div class="track-card">
+      <div class="id mono">ЗАЯВКА #4821</div>
+      <div class="device">MacBook Air — не включается</div>
+      <div class="track-steps">
+        <div class="track-step done"><div class="pt"></div><span>Принята</span></div>
+        <div class="track-step done"><div class="pt"></div><span>Диагностика</span></div>
+        <div class="track-step"><div class="pt"></div><span>Ремонт</span></div>
+        <div class="track-step"><div class="pt"></div><span>Готово</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="devices">
+    <div class="section-head">
+      <h2>С чем работаем</h2>
+      <p>Если техники нет в списке — всё равно напишите, скорее всего возьмёмся.</p>
+    </div>
+    <div class="devices">
+      <div class="device-card">
+        <h3>Ноутбуки</h3>
+        <p>Замена экрана, клавиатуры, чистка, апгрейд.</p>
+        <span class="price">от 1 500 ₽</span>
+      </div>
+      <div class="device-card">
+        <h3>Телефоны</h3>
+        <p>Экран, батарея, разъём зарядки, влага.</p>
+        <span class="price">от 900 ₽</span>
+      </div>
+      <div class="device-card">
+        <h3>Бытовая техника</h3>
+        <p>Стиральные машины, холодильники, кофемашины.</p>
+        <span class="price">от 1 200 ₽</span>
+      </div>
+      <div class="device-card">
+        <h3>Планшеты</h3>
+        <p>Экран, батарея, разъёмы, софт.</p>
+        <span class="price">от 1 100 ₽</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <div class="section-head">
+      <h2>Как это работает</h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="num mono">01</span>
+        <h3>Оставляете заявку</h3>
+        <p>Через сайт, звонок или мессенджер — как удобнее.</p>
+      </div>
+      <div class="flow-step">
+        <span class="num mono">02</span>
+        <h3>Бесплатная диагностика</h3>
+        <p>Мастер называет причину и стоимость до начала работ.</p>
+      </div>
+      <div class="flow-step">
+        <span class="num mono">03</span>
+        <h3>Ремонт</h3>
+        <p>Чиним на месте или забираем в мастерскую на 1–2 дня.</p>
+      </div>
+      <div class="flow-step">
+        <span class="num mono">04</span>
+        <h3>Возврат техники</h3>
+        <p>Привозим обратно, даём гарантию на работу и детали.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-grid">
+      <div>
+        <h2>Оставить заявку</h2>
+        <p style="color:var(--muted); font-size:14px; line-height:1.6;">Перезвоним в течение 15 минут в рабочее время, назовём ориентировочную стоимость.</p>
+      </div>
+      <form onsubmit="return false;">
+        <input type="text" placeholder="Имя" required>
+        <input type="text" placeholder="Телефон" required>
+        <select>
+          <option>Тип техники</option>
+          <option>Ноутбук</option>
+          <option>Телефон</option>
+          <option>Бытовая техника</option>
+          <option>Планшет</option>
+          <option>Другое</option>
+        </select>
+        <textarea placeholder="Что случилось"></textarea>
+        <button type="submit" class="btn">Отправить заявку</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>FIXPOINT</span>
+    <span>Демо-проект студии SYSTEM/AI</span>
+  </footer>
+
+</div>
+</body>
+</html>
