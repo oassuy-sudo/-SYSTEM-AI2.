@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATRIUM — архитектурная студия (демо-проект)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#EDEAE3; --text:#201D18; --muted:#6E6A62; --accent:#7C6A4E; --line:#D3CCBC; --panel:#F7F5F0; --dark:#201D18; }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:'Work Sans',sans-serif; }
+  h1,h2,h3,blockquote{ font-family:'Zilla Slab',serif; margin:0; font-weight:500; }
+  a{ color:inherit; }
+  .wrap{ max-width:1160px; margin:0 auto; padding:0 32px; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
+  header{ display:flex; align-items:center; justify-content:space-between; padding:28px 0; position:relative; z-index:2; }
+  .logo{ font-family:'Zilla Slab',serif; font-size:22px; font-weight:600; letter-spacing:.04em; }
+  nav{ display:flex; gap:32px; font-size:14px; color:var(--muted); }
+  nav a{ text-decoration:none; } nav a:hover{ color:var(--text); }
+
+  /* HERO: чертёж на всю ширину, заголовок поверх */
+  .hero{ position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:48px 48px; background-position:-1px -1px; }
+  .hero .wrap{ position:relative; min-height:560px; }
+  .hero-copy{ position:absolute; left:32px; top:56px; max-width:440px; z-index:1; }
+  .hero h1{ font-size:56px; line-height:1.08; }
+  .hero p{ font-size:16px; line-height:1.6; color:var(--muted); margin:20px 0 28px; max-width:38ch; }
+  .btn{ display:inline-block; background:var(--text); color:var(--bg); padding:13px 26px; font-size:14px; text-decoration:none; border:1px solid var(--text); cursor:pointer; font-family:inherit; }
+  .btn:hover{ background:transparent; color:var(--text); }
+  .drawing{ position:absolute; right:0; bottom:0; width:74%; height:auto; }
+  .drawing *{ fill:none; stroke:var(--text); stroke-width:1.3; vector-effect:non-scaling-stroke; }
+  .drawing .thin{ stroke-width:.7; stroke:var(--muted); }
+  .drawing .acc{ stroke:var(--accent); stroke-dasharray:5 5; }
+  .drawing text{ fill:var(--muted); stroke:none; font:11px 'Work Sans',sans-serif; }
+  .drawing .d{ stroke-dasharray:1; stroke-dashoffset:1; animation:draw 2.2s ease forwards; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  /* РАЗВОРОТ: избранный проект */
+  .feature{ display:grid; grid-template-columns:1.25fr 1fr; gap:56px; padding:88px 0; align-items:center; }
+  .plan{ background:var(--panel); border:1px solid var(--line); padding:20px; }
+  .plan svg{ width:100%; height:auto; display:block; }
+  .plan .w{ fill:none; stroke:var(--text); stroke-width:4; }
+  .plan .p{ fill:none; stroke:var(--text); stroke-width:1.5; }
+  .plan .t{ fill:none; stroke:var(--accent); stroke-width:1; stroke-dasharray:4 4; }
+  .plan text{ font:12px 'Work Sans',sans-serif; fill:var(--muted); }
+  .plan figcaption{ font-size:12px; color:var(--muted); margin-top:12px; }
+  .feature h2{ font-size:40px; line-height:1.1; margin:6px 0 16px; }
+  .feature .lead{ font-size:15px; line-height:1.65; color:var(--muted); margin:0 0 28px; max-width:44ch; }
+  dl{ margin:0; border-top:1px solid var(--line); }
+  dl div{ display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  dt{ color:var(--muted); } dd{ margin:0; font-weight:500; text-align:right; }
+
+  /* ИНДЕКС */
+  .index{ padding:24px 0 96px; }
+  .index-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px; }
+  .index-head h2{ font-size:30px; }
+  .index-head span{ font-size:13px; color:var(--muted); }
+  .row{ display:grid; grid-template-columns:180px 1fr 220px 70px; gap:28px; align-items:center; padding:16px 12px; border-top:1px solid var(--line); transition:background .2s; }
+  .row:last-child{ border-bottom:1px solid var(--line); }
+  .row:hover{ background:var(--panel); }
+  .row svg{ width:180px; height:120px; background:var(--panel); border:1px solid var(--line); }
+  .row svg *{ fill:none; stroke:var(--text); stroke-width:1.1; vector-effect:non-scaling-stroke; }
+  .row svg .t{ stroke:var(--muted); stroke-width:.6; }
+  .row svg .a{ stroke:var(--accent); stroke-dasharray:4 3; }
+  .row svg .g{ fill:url(#h); stroke:none; }
+  .row svg .gl{ fill:rgba(124,106,78,.14); stroke:none; }
+  .row svg .k{ fill:var(--text); stroke:none; }
+  .row svg text{ fill:var(--muted); stroke:none; font:7px 'Work Sans',sans-serif; }
+  .row h3{ font-size:21px; }
+  .row small{ display:block; font-family:'Work Sans',sans-serif; font-size:13px; color:var(--muted); margin-top:4px; }
+  .row .type{ font-size:13px; color:var(--muted); }
+  .row .year{ font-size:13px; color:var(--muted); text-align:right; }
+
+  /* ЦИТАТА */
+  .quote{ border-top:1px solid var(--line); padding:96px 0; display:grid; grid-template-columns:1fr 3fr; gap:32px; }
+  .quote .mark{ font-family:'Zilla Slab',serif; font-size:120px; line-height:.8; color:var(--accent); }
+  blockquote{ font-size:38px; line-height:1.25; font-style:italic; font-weight:400; max-width:26ch; }
+  .quote cite{ display:block; margin-top:24px; font-style:normal; font-size:14px; color:var(--muted); }
+
+  /* ТЁМНЫЙ КОНТАКТ */
+  .contact{ background:var(--dark); color:var(--bg); padding:88px 0; }
+  .contact .wrap{ display:grid; grid-template-columns:1fr 1fr; gap:64px; }
+  .contact h2{ font-size:42px; line-height:1.1; max-width:11ch; }
+  .contact p{ color:#A9A396; font-size:15px; line-height:1.6; margin:18px 0 0; max-width:36ch; }
+  form{ display:flex; flex-direction:column; gap:22px; }
+  .contact input,.contact textarea{ background:transparent; border:0; border-bottom:1px solid #5A554B; padding:12px 0; font:inherit; font-size:15px; color:var(--bg); }
+  .contact input::placeholder,.contact textarea::placeholder{ color:#8A8478; }
+  .contact input:focus,.contact textarea:focus{ outline:none; border-bottom-color:var(--bg); }
+  .contact textarea{ min-height:80px; resize:vertical; }
+  .contact .btn{ background:var(--bg); color:var(--dark); border-color:var(--bg); align-self:flex-start; }
+  .contact .btn:hover{ background:transparent; color:var(--bg); }
+  #ok{ display:none; font-size:14px; color:#C9D8B8; }
+
+  footer{ background:var(--dark); border-top:1px solid #3A362F; color:#8A8478; font-size:13px; }
+  footer .wrap{ display:flex; justify-content:space-between; padding-top:22px; padding-bottom:22px; }
+
+  @media (max-width:900px){
+    nav{ display:none; }
+    .hero .wrap{ min-height:0; padding-bottom:0; }
+    .hero-copy{ position:static; padding:40px 0 8px; }
+    .hero h1{ font-size:40px; }
+    .drawing{ position:static; width:100%; display:block; }
+    .feature,.contact .wrap,.quote{ grid-template-columns:1fr; gap:36px; }
+    .feature{ padding:56px 0; }
+    .row{ grid-template-columns:110px 1fr; gap:14px; }
+    .row svg{ width:110px; height:73px; }
+    .row .type,.row .year{ display:none; }
+    blockquote{ font-size:28px; }
+    .quote{ padding:64px 0; } .contact{ padding:64px 0; }
+  }
+  @media (prefers-reduced-motion:reduce){ .drawing .d{ animation:none; stroke-dashoffset:0; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="h" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#B9B09C" stroke-width=".8"/></pattern></defs></svg>
+
+<div class="wrap">
+  <header>
+    <div class="logo">ATRIUM</div>
+    <nav><a href="#work">Проект</a><a href="#index">Все проекты</a><a href="#contact">Контакты</a></nav>
+  </header>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1>Пространство, которое работает на людей.</h1>
+      <p>Частные дома, интерьеры и общественные места — от эскиза до авторского надзора. Мастерская из шести архитекторов.</p>
+      <a class="btn" href="#contact">Обсудить проект</a>
+    </div>
+    <svg class="drawing" viewBox="0 0 720 380" role="img" aria-label="Чертёж фасада: дом на склоне">
+      <path class="d" pathLength="1" d="M0 170H250L470 300H720" style="animation-delay:.1s"/>
+      <path class="d" pathLength="1" d="M60 100H262M70 100V170M250 100V170M70 100H250" style="animation-delay:.5s"/>
+      <rect class="d" pathLength="1" x="300" y="190" width="260" height="90" style="animation-delay:.9s"/>
+      <path class="d" pathLength="1" d="M290 190H572" style="animation-delay:1s"/>
+      <path class="d thin" pathLength="1" d="M110 120h100v50H110zM160 120v50M110 145h100" style="animation-delay:1.3s"/>
+      <path class="d thin" pathLength="1" d="M380 190v90M430 190v90M480 190v90M520 190v90" style="animation-delay:1.5s"/>
+      <path class="d" pathLength="1" d="M500 280v20M545 280v25" style="animation-delay:1.6s"/>
+      <path class="d acc" d="M690 30L400 190" style="animation-delay:1.8s;stroke-dasharray:5 5;stroke-dashoffset:0;opacity:0;animation:fade 1s 1.9s forwards"/>
+      <path class="thin" d="M60 335H560M60 328v14M560 328v14M250 328v14"/>
+      <text x="140" y="326">8 400</text><text x="390" y="326">13 600</text>
+      <text x="8" y="164">±0.000</text><text x="590" y="296">−3.150</text><text x="520" y="64">свет, 15:00</text>
+    </svg>
+  </div>
+</section>
+<style>@keyframes fade{ to{ opacity:1; } }</style>
+
+<div class="wrap">
+  <section class="feature" id="work">
+    <figure class="plan" style="margin:0">
+      <svg viewBox="0 0 460 330" role="img" aria-label="План первого этажа">
+        <rect class="t" x="250" y="250" width="200" height="70"/>
+        <rect class="w" x="12" y="12" width="436" height="238"/>
+        <path class="w" d="M200 12V150M200 150H12M330 150V250M200 190H330"/>
+        <path class="p" d="M150 150a36 36 0 0 1 36 36M330 215a34 34 0 0 0-34 34M200 100a30 30 0 0 1 30-30"/>
+        <path class="p" d="M60 12h80M260 12h120M448 70v80"/>
+        <text x="30" y="90">Гостиная · 42 м²</text><text x="214" y="90">Кухня · 24</text>
+        <text x="30" y="215">Спальня · 20</text><text x="214" y="176">Холл</text><text x="344" y="215">Санузел</text>
+        <text x="296" y="290">Терраса · 38</text>
+      </svg>
+      <figcaption>План первого этажа. Пунктиром — терраса, выходящая на южный склон.</figcaption>
+    </figure>
+    <div>
+      <h2>Дом на склоне</h2>
+      <p class="lead">Два объёма вписаны в уклон участка: верхний закрыт от дороги, нижний открыт к долине и держит свет с юга до вечера. Из материалов — бетон, лиственница и стекло.</p>
+      <dl>
+        <div><dt>Площадь</dt><dd>286 м²</dd></div>
+        <div><dt>Участок</dt><dd>12 соток, уклон 18°</dd></div>
+        <div><dt>Материалы</dt><dd>бетон, лиственница, стекло</dd></div>
+        <div><dt>Срок проекта</dt><dd>14 месяцев</dd></div>
+        <div><dt>Год</dt><dd>2026</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="index" id="index">
+    <div class="index-head"><h2>Все проекты</h2><span>2023–2026</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path class="g" d="M0 70H80L170 124H240V152H0Z"/><path d="M0 70H80L170 124H240"/><path class="gl" d="M92 84h98v40H92z"/><path d="M92 84h98v40H92zM86 82h112M112 84v40M132 84v40M152 84v40M172 84v40"/><path d="M14 40h80M20 40v30M86 40v30"/><path class="gl" d="M34 50h36v20H34z"/><path class="t" d="M34 50h36v20H34zM52 50v20M34 60h36"/><path class="a" d="M232 8L150 82"/><circle cx="214" cy="106" r="10"/><path class="t" d="M214 116v8M208 100l6 6 6-6"/><path class="t" d="M20 146H190M20 141v10M190 141v10"/><text x="84" y="157">13 600</text><text x="6" y="64">±0.000</text></svg><h3>Дом на склоне<small>Бетон и лиственница, два объёма</small></h3><span class="type">Частный дом</span><span class="year">2026</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path d="M16 14h208v132H16z"/><path class="gl" d="M26 26h78v64H26z"/><path class="t" d="M26 26h78v64H26zM52 26v64M78 26v64M26 42h78M26 58h78M26 74h78"/><path d="M110 14v132M114 14v132"/><path d="M114 72h110M114 76h110M130 76v-8M150 76v-8M170 76v-8M190 76v-8M210 76v-8M114 68h110"/><path d="M118 146v-9h10v-9h10v-9h10v-9h10v-9h10"/><path class="t" d="M150 14v28M190 14v22"/><path d="M142 42a8 8 0 0 1 16 0zM182 36a8 8 0 0 1 16 0z"/><path d="M164 130h50v16h-50zM164 130v-12h50v12M170 122h38"/><circle cx="136" cy="62" r="3"/><path class="t" d="M136 65v6M130 69h12"/></svg><h3>Лофт на Заводской<small>Переделка цеха в жильё, 96 м²</small></h3><span class="type">Интерьер</span><span class="year">2025</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path class="g" d="M0 128H240V152H0Z"/><path d="M0 128H240"/><path d="M26 54h188v74H26zM18 54l12-24h180l12 24z"/><path class="t" d="M54 30l-8 24M90 30l-4 24M130 30v24M170 30l4 24M206 30l8 24"/><path class="gl" d="M38 68h100v52H38z"/><path d="M38 68h100v52H38zM88 68v52M38 106h100"/><path d="M152 72h32v56h-32zM178 100h3"/><path class="t" d="M70 38h50v10H70z"/><text x="76" y="46">MERIDIAN</text><path d="M48 106a6 6 0 0 1 12 0zM52 106v-6h4v6"/><circle cx="204" cy="118" r="7"/><path class="t" d="M204 125v3M196 128h16M192 114v14M216 114v14"/></svg><h3>Кофейня Meridian<small>Стойка из цельного дуба, 48 м²</small></h3><span class="type">Коммерческое пространство</span><span class="year">2025</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path class="g" d="M0 128H240V152H0Z"/><path d="M0 128H240"/><path d="M18 128V82l50-34 50 34v46zM26 82l42-29 42 29"/><path class="t" d="M40 66l28-19 28 19M30 90h76"/><path d="M92 46v-14h8v22"/><path class="gl" d="M34 96h24v32H34z"/><path d="M34 96h24v32H34zM46 96v32M76 96h24v22H76zM88 96v22"/><path d="M118 128V90h104v38zM112 88h116"/><path class="gl" d="M128 98h54v30h-54z"/><path d="M128 98h54v30h-54zM146 98v30M164 98v30"/><path d="M194 100h20v28h-20zM208 114h2"/><circle cx="12" cy="112" r="11"/><circle cx="232" cy="108" r="12"/><path class="t" d="M12 123v5M232 120v8"/></svg><h3>Резиденция У.<small>Семейный дом с внутренним двором</small></h3><span class="type">Частный дом</span><span class="year">2024</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path d="M14 12h212v136H14z"/><path class="gl" d="M148 12h78v58h-78z"/><path d="M148 12v58h78"/><ellipse cx="187" cy="40" rx="24" ry="11"/><path class="t" d="M170 24a3 3 0 1 0 .1 0M204 24a3 3 0 1 0 .1 0M170 56a3 3 0 1 0 .1 0M204 56a3 3 0 1 0 .1 0M160 40a3 3 0 1 0 .1 0M214 40a3 3 0 1 0 .1 0"/><path d="M26 26h30v14H26zM64 26h30v14H64zM102 26h30v14h-30zM26 56h30v14H26zM64 56h30v14H64zM102 56h30v14h-30zM26 92h30v14H26zM64 92h30v14H64zM102 92h30v14h-30z"/><path class="t" d="M36 46a3 3 0 1 0 .1 0M74 46a3 3 0 1 0 .1 0M112 46a3 3 0 1 0 .1 0M36 76a3 3 0 1 0 .1 0M74 76a3 3 0 1 0 .1 0M112 76a3 3 0 1 0 .1 0"/><path d="M148 96h78v52h-78zM156 104h36v10h-36zM156 128h62"/><path class="k" d="M14 12h5v5h-5zM14 143h5v5h-5zM221 143h5v5h-5zM221 12h5v5h-5z"/></svg><h3>Офис студии Nord<small>Open space на 40 мест, акустика</small></h3><span class="type">Интерьер</span><span class="year">2024</span></div>
+    <div class="row"><svg viewBox="0 0 240 160"><path class="t" d="M0 112H240"/><circle cx="30" cy="92" r="16"/><circle cx="214" cy="88" r="18"/><path class="g" d="M0 124H240V152H0Z"/><path d="M0 124H240"/><path d="M8 62Q120 28 232 62M8 70Q120 36 232 70M8 62v8M232 62v8"/><path d="M34 64v60M78 53v71M120 49v75M162 53v71M206 64v60"/><path class="t" d="M20 70L40 124M232 70L212 124"/><path d="M60 124v-10h42v10M138 124v-10h42v10"/><circle cx="122" cy="102" r="3.5"/><path d="M122 106v10M118 124l4-8 4 8M122 109l-5 6M122 109l5 6"/><circle cx="168" cy="106" r="3"/><path d="M168 109v8M165 124l3-7 3 7"/><path class="a" d="M24 138H216"/></svg><h3>Павильон в парке<small>Лёгкая кровля на шести опорах</small></h3><span class="type">Общественное пространство</span><span class="year">2023</span></div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="quote">
+    <div class="mark">“</div>
+    <div>
+      <blockquote>Сначала мы смотрим, как свет входит в комнату утром и вечером. Всё остальное — потом.</blockquote>
+      <cite>Анна Левкина, главный архитектор ATRIUM</cite>
+    </div>
+  </section>
+</div>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Обсудим ваш проект.</h2>
+      <p>Отвечаем в течение суток. Присылайте даже черновой набросок — разберёмся вместе.</p>
+    </div>
+    <form id="f">
+      <input type="text" placeholder="Имя" required aria-label="Имя">
+      <input type="text" placeholder="Телефон или email" required aria-label="Телефон или email">
+      <textarea placeholder="Что хотите построить или переделать" aria-label="Описание задачи"></textarea>
+      <button type="submit" class="btn">Отправить</button>
+      <div id="ok" role="status">Заявка принята. Это демо-страница, данные никуда не отправляются.</div>
+    </form>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>ATRIUM</span><span>Демо-проект студии SYSTEM/AI</span></div></footer>
+
+<script>
+  document.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault(); document.getElementById('ok').style.display='block'; this.reset();
+  });
+</script>
+</body>
+</html>

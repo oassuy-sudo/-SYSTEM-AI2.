@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIXPOINT — ремонт техники (демо-проект)</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#F1F3F4; --text:#14171A; --muted:#5B6570; --accent:#D9822B; --accent-d:#B96A1C; --steel:#2F6690; --card:#fff; --border:#DDE1E4; --ink:#16212B; }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:2px solid var(--steel); outline-offset:3px; }
+  h1,h2,h3{ margin:0; }
+
+  header{ display:flex; align-items:center; justify-content:space-between; padding:22px 0; }
+  .logo{ font-weight:700; font-size:19px; } .logo span{ color:var(--accent); }
+  nav{ display:flex; gap:28px; font-size:14px; color:var(--muted); } nav a:hover{ color:var(--text); }
+  .btn{ display:inline-block; background:var(--accent); color:#fff; border:0; padding:12px 20px; border-radius:8px; font:600 14px 'IBM Plex Sans',sans-serif; cursor:pointer; }
+  .btn:hover{ background:var(--accent-d); }
+  .btn.ghost{ background:transparent; color:var(--text); border:1px solid #C5CBD0; } .btn.ghost:hover{ border-color:var(--text); }
+
+  /* HERO + ТРЕКЕР */
+  .hero{ display:grid; grid-template-columns:1fr 1.1fr; gap:56px; padding:40px 0 72px; align-items:center; }
+  .hero h1{ font-size:46px; line-height:1.1; font-weight:700; max-width:12ch; }
+  .hero p{ font-size:16px; line-height:1.6; color:var(--muted); max-width:42ch; margin:18px 0 28px; }
+  .actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .tracker{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px; box-shadow:0 18px 40px -24px rgba(20,35,50,.35); }
+  .tr-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .tr-top .id{ font-size:12px; color:var(--muted); }
+  .state{ font-size:12px; font-weight:600; color:var(--steel); background:rgba(47,102,144,.1); padding:5px 11px; border-radius:999px; }
+  .tracker h3{ font-size:20px; font-weight:600; margin-bottom:2px; }
+  .tracker .sub{ font-size:13px; color:var(--muted); margin-bottom:20px; }
+  .bar{ height:6px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:22px; }
+  .bar i{ display:block; height:100%; background:var(--steel); border-radius:99px; transition:width .5s ease; }
+  .steps{ list-style:none; margin:0; padding:0; }
+  .step{ display:grid; grid-template-columns:22px 1fr auto; gap:0 14px; padding:0 0 18px; position:relative; cursor:pointer; background:none; border:0; width:100%; text-align:left; font:inherit; color:inherit; }
+  .step::before{ content:''; position:absolute; left:10px; top:20px; bottom:-2px; width:2px; background:var(--border); }
+  .step:last-child{ padding-bottom:0; } .step:last-child::before{ display:none; }
+  .step .pt{ width:22px; height:22px; border-radius:50%; background:var(--card); border:2px solid var(--border); margin-top:1px; position:relative; z-index:1; transition:.25s; }
+  .step.done .pt{ background:var(--steel); border-color:var(--steel); }
+  .step.done::before{ background:var(--steel); }
+  .step.now .pt{ border-color:var(--accent); background:var(--accent); box-shadow:0 0 0 5px rgba(217,130,43,.2); }
+  .step b{ display:block; font-size:15px; font-weight:600; color:var(--muted); }
+  .step.done b,.step.now b{ color:var(--text); }
+  .step small{ display:block; font-size:13px; color:var(--muted); line-height:1.45; margin-top:2px; }
+  .step time{ font:12px 'IBM Plex Mono',monospace; color:var(--muted); padding-top:3px; }
+  .tr-foot{ display:flex; justify-content:space-between; gap:16px; margin-top:22px; padding-top:16px; border-top:1px solid var(--border); font-size:13px; color:var(--muted); }
+  .tr-foot b{ color:var(--text); font-weight:600; }
+  .hint{ font-size:12px; color:var(--muted); margin:12px 0 0; text-align:center; }
+
+  .scene{ display:block; width:100%; max-width:460px; height:auto; margin-top:40px; }
+  .scene *{ fill:none; stroke:var(--text); stroke-width:1.3; vector-effect:non-scaling-stroke; }
+  .scene .s{ fill:rgba(47,102,144,.09); stroke:none; }
+  .scene .t{ stroke:var(--muted); stroke-width:.7; }
+  .scene .a{ stroke:var(--accent); stroke-width:1.5; }
+  .scene .da{ stroke:var(--accent); stroke-dasharray:4 4; }
+  .scene .k{ fill:var(--text); stroke:none; }
+  .ic{ width:28px; height:22px; vertical-align:middle; margin-right:10px; fill:none; stroke:var(--steel); stroke-width:1.4; stroke-linejoin:round; }
+
+  /* ПОЛОСА ЦИФР */
+  .stats{ background:var(--ink); color:#fff; }
+  .stats .wrap{ display:grid; grid-template-columns:repeat(4,1fr); }
+  .stat{ padding:34px 24px 34px 0; border-right:1px solid #2B3A48; margin-right:24px; }
+  .stat:last-child{ border:0; margin:0; }
+  .stat b{ display:block; font:500 38px 'IBM Plex Mono',monospace; letter-spacing:-.02em; }
+  .stat span{ font-size:13px; color:#9FB0BF; }
+
+  /* ЦЕНЫ */
+  .prices{ padding:80px 0; display:grid; grid-template-columns:.8fr 1.6fr; gap:56px; }
+  .prices h2,.faq h2{ font-size:30px; font-weight:700; line-height:1.15; }
+  .prices .note{ font-size:14px; color:var(--muted); line-height:1.6; margin:14px 0 0; max-width:30ch; }
+  table{ width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; font-size:14px; }
+  th{ text-align:left; font-weight:500; font-size:12px; color:var(--muted); padding:12px 18px; background:#F7F8F9; border-bottom:1px solid var(--border); }
+  td{ padding:12px 18px; border-bottom:1px solid var(--border); }
+  td:nth-child(2){ color:var(--muted); white-space:nowrap; }
+  td:last-child,th:last-child{ text-align:right; white-space:nowrap; }
+  td:last-child{ font:500 13px 'IBM Plex Mono',monospace; color:var(--steel); }
+  .grp td{ background:#EEF2F5; font-weight:600; font-size:13px; padding:9px 18px; color:var(--text); }
+  tr:last-child td{ border-bottom:0; }
+  tbody tr:not(.grp):hover td{ background:#FBFCFC; }
+
+  /* FAQ */
+  .faq{ padding:0 0 80px; display:grid; grid-template-columns:.8fr 1.6fr; gap:56px; }
+  details{ border-bottom:1px solid var(--border); }
+  details:first-of-type{ border-top:1px solid var(--border); }
+  summary{ list-style:none; cursor:pointer; padding:18px 36px 18px 0; font-size:16px; font-weight:600; position:relative; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:'+'; position:absolute; right:4px; top:14px; font:400 24px 'IBM Plex Mono',monospace; color:var(--accent); transition:transform .2s; }
+  details[open] summary::after{ transform:rotate(45deg); }
+  details p{ margin:0 0 18px; font-size:14px; line-height:1.65; color:var(--muted); max-width:56ch; }
+
+  /* КОНТАКТ-ЧАТ */
+  .contact{ background:#E7EBEE; border-top:1px solid var(--border); }
+  .contact .wrap{ display:grid; grid-template-columns:1fr 1.1fr; gap:56px; padding-top:72px; padding-bottom:72px; align-items:start; }
+  .contact h2{ font-size:30px; font-weight:700; line-height:1.15; max-width:13ch; }
+  .contact p{ font-size:14px; line-height:1.65; color:var(--muted); max-width:36ch; margin:14px 0 22px; }
+  .contact ul{ list-style:none; padding:0; margin:0; font-size:14px; line-height:2; }
+  .chat{ background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; }
+  .chat-head{ display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--border); font-size:14px; font-weight:600; }
+  .chat-head i{ width:9px; height:9px; border-radius:50%; background:#3BA55D; }
+  .chat-head small{ font-weight:400; color:var(--muted); margin-left:auto; }
+  #log{ padding:18px; min-height:260px; max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+  .m{ max-width:82%; padding:10px 14px; border-radius:14px; font-size:14px; line-height:1.5; animation:in .25s ease; }
+  .m.bot{ background:#EEF2F5; border-bottom-left-radius:4px; align-self:flex-start; }
+  .m.me{ background:var(--steel); color:#fff; border-bottom-right-radius:4px; align-self:flex-end; }
+  @keyframes in{ from{ opacity:0; transform:translateY(6px); } }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; align-self:flex-start; }
+  .chips button{ font:500 13px 'IBM Plex Sans',sans-serif; background:var(--card); border:1px solid var(--steel); color:var(--steel); border-radius:99px; padding:7px 14px; cursor:pointer; }
+  .chips button:hover{ background:var(--steel); color:#fff; }
+  .chat form{ display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); }
+  .chat input{ flex:1; border:1px solid var(--border); border-radius:10px; padding:11px 14px; font:14px 'IBM Plex Sans',sans-serif; background:#fff; color:var(--text); }
+  .chat input:disabled{ background:#F4F6F7; }
+  .chat form .btn{ padding:11px 18px; } .chat form .btn:disabled{ background:#E4B98B; cursor:default; }
+
+  footer{ border-top:1px solid var(--border); }
+  footer .wrap{ display:flex; justify-content:space-between; padding-top:22px; padding-bottom:22px; font-size:13px; color:var(--muted); }
+
+  @media (max-width:900px){
+    nav{ display:none; }
+    .hero,.prices,.faq,.contact .wrap{ grid-template-columns:1fr; gap:36px; }
+    .hero{ padding:24px 0 48px; } .hero h1{ font-size:36px; }
+    .stats .wrap{ grid-template-columns:1fr 1fr; }
+    .stat{ border:0; margin:0; padding:24px 12px 24px 0; }
+    .prices{ padding:56px 0; } .faq{ padding-bottom:56px; }
+    .contact .wrap{ padding-top:48px; padding-bottom:48px; }
+    td,th{ padding-left:12px; padding-right:12px; }
+  }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">FIX<span>POINT</span></div>
+    <nav><a href="#prices">Цены</a><a href="#faq">Вопросы</a><a href="#contact">Заявка</a></nav>
+    <a class="btn" href="#contact">Оставить заявку</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Техника сломалась — мы уже едем.</h1>
+      <p>Ремонт ноутбуков, телефонов и бытовой техники с выездом или в мастерской. Диагностика бесплатно, если не чините у нас — ничего не платите.</p>
+      <div class="actions"><a class="btn" href="#contact">Оставить заявку</a><a class="btn ghost" href="#prices">Узнать стоимость</a></div>
+      <svg class="scene" viewBox="0 0 460 170" role="img" aria-label="Ноутбук, телефон, планшет и стиральная машина">
+        <path class="s" d="M40 50h100v60H40zM201 68h34v66h-34zM264 76h74v64h-74zM374 74h60v70h-60z"/>
+        <path d="M34 44h112v72H34zM18 120h144l-6 12H24zM74 120h32"/>
+        <path class="t" d="M50 62h50M50 72h70M50 82h36"/>
+        <path class="da" d="M36 96H144"/>
+        <path d="M196 58h44v88h-44zM214 63h8"/><circle class="t" cx="218" cy="140" r="2"/>
+        <path class="a" d="M205 72l12 18-8 10 14 22"/>
+        <path d="M258 70h86v76h-86z"/><circle class="t" cx="332" cy="108" r="2"/><path class="t" d="M270 86h44M270 98h30"/>
+        <path d="M366 52h76v98h-76zM366 70h76"/><circle cx="378" cy="61" r="3"/><path class="t" d="M390 61h30"/>
+        <circle cx="404" cy="112" r="24"/><circle class="t" cx="404" cy="112" r="16"/><path class="t" d="M390 116q14 -12 28 0"/>
+        <path class="t" d="M0 150H460"/>
+        <path class="a" d="M178 40l-26 26M178 40l8 8l-6 6"/>
+      </svg>
+    </div>
+
+    <div>
+      <div class="tracker" aria-label="Пример карточки заявки">
+        <div class="tr-top"><span class="id mono">ЗАЯВКА #4821</span><span class="state" id="state">Ремонт</span></div>
+        <h3>MacBook Air 13″ — не включается</h3>
+        <div class="sub">Мастер: Игорь К. · забор курьером в понедельник</div>
+        <div class="bar"><i id="bar"></i></div>
+        <ol class="steps" id="steps"></ol>
+        <div class="tr-foot"><span>Стоимость согласована<br><b>3 800 ₽</b></span><span style="text-align:right">Готово примерно<br><b id="eta">завтра, 18:00</b></span></div>
+      </div>
+      <p class="hint">Так клиент видит свою заявку. Нажмите на этап — статус изменится.</p>
+    </div>
+  </section>
+</div>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><b>12 400</b><span>ремонтов за 6 лет</span></div>
+    <div class="stat"><b>4,9</b><span>средняя оценка клиентов</span></div>
+    <div class="stat"><b>1–2 дня</b><span>средний срок ремонта</span></div>
+    <div class="stat"><b>12 мес.</b><span>гарантия на работу и детали</span></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="prices" id="prices">
+    <div>
+      <h2>Цены на типовой ремонт</h2>
+      <p class="note">Итоговую цену называем после диагностики и до начала работ. Если техники нет в списке — напишите, скорее всего возьмёмся.</p>
+    </div>
+    <table>
+      <thead><tr><th>Услуга</th><th>Срок</th><th>Цена</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="3"><svg class="ic" viewBox="0 0 32 24" aria-hidden="true"><rect x="6" y="3" width="20" height="13" rx="1.5"/><path d="M2 20h28l-2-4H4z"/></svg>Ноутбуки</td></tr>
+        <tr><td>Чистка и замена термопасты</td><td>2 часа</td><td>от 1 500 ₽</td></tr>
+        <tr><td>Замена клавиатуры</td><td>1 день</td><td>от 2 800 ₽</td></tr>
+        <tr><td>Замена экрана</td><td>1–2 дня</td><td>от 4 500 ₽</td></tr>
+        <tr class="grp"><td colspan="3"><svg class="ic" viewBox="0 0 32 24" aria-hidden="true"><rect x="10" y="1.5" width="12" height="21" rx="2.5"/><path d="M14 19.5h4"/></svg>Телефоны</td></tr>
+        <tr><td>Замена батареи</td><td>40 минут</td><td>от 900 ₽</td></tr>
+        <tr><td>Замена разъёма зарядки</td><td>1 час</td><td>от 1 100 ₽</td></tr>
+        <tr><td>Замена экрана</td><td>1 час</td><td>от 1 900 ₽</td></tr>
+        <tr class="grp"><td colspan="3"><svg class="ic" viewBox="0 0 32 24" aria-hidden="true"><rect x="7" y="2" width="18" height="21" rx="2"/><circle cx="16" cy="14" r="5"/><path d="M7 7h18"/></svg>Бытовая техника</td></tr>
+        <tr><td>Стиральная машина</td><td>1 день</td><td>от 1 200 ₽</td></tr>
+        <tr><td>Кофемашина</td><td>1–2 дня</td><td>от 1 500 ₽</td></tr>
+        <tr><td>Холодильник</td><td>1–2 дня</td><td>от 1 800 ₽</td></tr>
+        <tr class="grp"><td colspan="3"><svg class="ic" viewBox="0 0 32 24" aria-hidden="true"><rect x="4" y="3" width="24" height="18" rx="2.5"/><path d="M25 12h.1"/></svg>Планшеты</td></tr>
+        <tr><td>Замена батареи или разъёма</td><td>1–2 часа</td><td>от 1 100 ₽</td></tr>
+        <tr><td>Замена экрана</td><td>1 день</td><td>от 2 400 ₽</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2>Частые вопросы</h2>
+    <div>
+      <details open><summary>Сколько стоит диагностика?</summary><p>Ничего: диагностика бесплатна. Если после неё вы решите не ремонтировать технику у нас, платить не нужно.</p></details>
+      <details><summary>Что, если ремонт невозможен?</summary><p>Скажем об этом сразу после диагностики и вернём технику без оплаты. Работы мы начинаем только после того, как вы согласовали цену.</p></details>
+      <details><summary>Какая гарантия?</summary><p>12 месяцев на выполненную работу и установленные детали. Гарантийный случай чиним бесплатно.</p></details>
+      <details><summary>Что с моими данными на устройстве?</summary><p>Мы не копируем и не удаляем данные. Для замены экрана, батареи и разъёма пароль не нужен, для диагностики программных проблем мастер спросит его отдельно.</p></details>
+      <details><summary>Вы приезжаете на дом?</summary><p>Да, для бытовой техники и по запросу для остальной. Стоимость выезда назовём при подтверждении заявки.</p></details>
+    </div>
+  </section>
+</div>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Расскажите, что случилось</h2>
+      <p>Ответьте на три вопроса — мастер перезвонит в течение 15 минут в рабочее время и назовёт ориентировочную стоимость.</p>
+      <ul><li>Ежедневно, 9:00–21:00</li><li>Диагностика бесплатно</li></ul>
+    </div>
+    <div class="chat">
+      <div class="chat-head"><i></i>Приёмка FIXPOINT<small>обычно отвечаем за 15 минут</small></div>
+      <div id="log" role="log" aria-live="polite"></div>
+      <form id="cf"><input id="ci" type="text" placeholder="Сначала выберите технику" disabled aria-label="Ваш ответ"><button class="btn" id="cb" disabled>Отправить</button></form>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>FIXPOINT</span><span>Демо-проект студии SYSTEM/AI</span></div></footer>
+
+<script>
+  /* Трекер */
+  var S=[
+    {t:'Принята',time:'пн 09:12',n:'Курьер забрал ноутбук в 10:30.'},
+    {t:'Диагностика',time:'пн 11:40',n:'Причина найдена: вышел из строя контроллер питания.'},
+    {t:'Ремонт',time:'вт 10:05',n:'Игорь К. заменяет микросхему на плате.'},
+    {t:'Проверка',time:'вт 15:00',n:'Тест под нагрузкой, проверка зарядки и батареи.'},
+    {t:'Готово',time:'вт 18:00',n:'Привезём обратно, гарантия 12 месяцев.'}
+  ], ETA=['сегодня, 12:00','сегодня, 16:00','завтра, 18:00','завтра, 18:00','готово'], cur=2;
+  var st=document.getElementById('steps');
+  function draw(){
+    st.innerHTML=S.map(function(s,i){
+      var c=i<cur?'done':i==cur?'now':'';
+      return '<li><button class="step '+c+'" data-i="'+i+'"><span class="pt"></span><span><b>'+s.t+'</b><small>'+(i<=cur?s.n:'Ещё впереди')+'</small></span><time>'+(i<=cur?s.time:'')+'</time></button></li>';
+    }).join('');
+    document.getElementById('bar').style.width=((cur+1)/S.length*100)+'%';
+    document.getElementById('state').textContent=S[cur].t;
+    document.getElementById('eta').textContent=ETA[cur];
+  }
+  st.addEventListener('click',function(e){ var b=e.target.closest('.step'); if(b){ cur=+b.dataset.i; draw(); } });
+  draw();
+
+  /* Чат-заявка */
+  var log=document.getElementById('log'),cf=document.getElementById('cf'),ci=document.getElementById('ci'),cb=document.getElementById('cb'),step=0;
+  function say(t,who){ var d=document.createElement('div'); d.className='m '+who; d.textContent=t; log.appendChild(d); log.scrollTop=log.scrollHeight; }
+  function ask(ph){ ci.disabled=false; cb.disabled=false; ci.placeholder=ph; }
+  function start(){
+    say('Здравствуйте! Какая техника сломалась?','bot');
+    var w=document.createElement('div'); w.className='chips';
+    ['Ноутбук','Телефон','Бытовая техника','Планшет','Другое'].forEach(function(n){
+      var b=document.createElement('button'); b.type='button'; b.textContent=n;
+      b.onclick=function(){ w.remove(); say(n,'me'); say('Что с ней случилось? Опишите коротко.','bot'); step=1; ask('Например: не включается'); ci.focus(); };
+      w.appendChild(b);
+    });
+    log.appendChild(w);
+  }
+  cf.addEventListener('submit',function(e){
+    e.preventDefault(); var v=ci.value.trim(); if(!v) return;
+    say(v,'me'); ci.value='';
+    if(step==1){ step=2; say('Понятно. Оставьте телефон — мастер перезвонит в течение 15 минут.','bot'); ci.placeholder='+7 …'; ci.type='tel'; }
+    else if(step==2){
+      if(v.replace(/\D/g,'').length<10){ say('Проверьте номер: нужно минимум 10 цифр.','bot'); return; }
+      step=3; say('Заявка #4822 принята. Это демо-страница: данные никуда не отправляются.','bot');
+      ci.disabled=true; cb.disabled=true; ci.placeholder='Заявка отправлена';
+    }
+  });
+  start();
+</script>
+</body>
+</html>
